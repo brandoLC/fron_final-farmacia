@@ -1,0 +1,196 @@
+<!-- Header minimalista moderno -->
+<header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Main navbar - altura reducida -->
+    <div class="flex items-center justify-between h-14">
+      <!-- Logo minimalista -->
+      <div class="flex items-center">
+        <a href="/" class="flex items-center space-x-2">
+          <div
+            class="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-sm"
+          >
+            <img
+              src="assets/images/logo-farmacia.svg"
+              alt="FarmaSalud"
+              class="w-6 h-6 brightness-0 invert"
+            />
+          </div>
+          <span class="text-xl font-bold text-green-700">FarmaSalud</span>
+        </a>
+      </div>
+
+      <!-- Search bar central minimalista -->
+      <div class="flex-1 max-w-lg mx-8">
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Buscar medicamentos..."
+            class="w-full pl-10 pr-4 py-2 bg-gray-50 border-0 rounded-full text-sm text-gray-900 placeholder-gray-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+          />
+          <svg
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-full text-gray-100 bg-green-500 rounded-r-2xl"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Actions minimalistas -->
+      <div class="flex items-center space-x-3">
+        <!-- User account -->
+        <div class="relative group">
+          <button
+            class="flex items-center space-x-1 px-3 py-2 text-gray-700 hover:text-green-600 transition-colors rounded-lg hover:bg-gray-50"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="hidden sm:block text-sm font-medium">Cuenta</span>
+          </button>
+
+          <!-- Dropdown minimalista -->
+          <div
+            class="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10"
+          >
+            <div class="py-2">
+              <a
+                href="/auth/login"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Iniciar Sesión</a
+              >
+              <a
+                href="/auth/register"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Registrarse</a
+              >
+              <hr class="my-1" />
+              <a
+                href="/profile"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Mi Perfil</a
+              >
+              <a
+                href="/orders"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Mis Pedidos</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Shopping cart minimalista -->
+        <button
+          class="relative p-2 text-blue-500 transition-colors rounded-lg bg-blue-100 flex flex-row items-center space-x-2 hover:bg-blue-200"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.433-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+            />
+          </svg>
+          <!-- Badge minimalista -->
+          <div>3</div>
+        </button>
+
+        <!-- Mobile menu -->
+        <button
+          class="sm:hidden p-2 text-gray-700 hover:text-green-600 transition-colors rounded-lg hover:bg-gray-50"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation minimalista -->
+  <nav class="border-t border-gray-100 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-center space-x-8 h-12">
+        <a
+          href="/"
+          class="text-gray-700 hover:text-green-600 font-medium text-sm transition-colors"
+          >Inicio</a
+        >
+
+        <div class="relative group">
+          <button
+            class="flex items-center space-x-1 text-gray-700 hover:text-green-600 font-medium text-sm transition-colors"
+          >
+            <span>Medicamentos</span>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <!-- Dropdown minimalista -->
+          <div
+            class="absolute left-0 mt-0 w-48 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20"
+          >
+            <div class="py-2">
+              <a
+                href="/products/analgesicos"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Analgésicos</a
+              >
+              <a
+                href="/products/antibioticos"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Antibióticos</a
+              >
+              <a
+                href="/products/vitaminas"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Vitaminas</a
+              >
+              <a
+                href="/products/infantil"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600"
+                >Infantil</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="/products/vitaminas"
+          class="text-gray-700 hover:text-green-600 font-medium text-sm transition-colors"
+          >Vitaminas</a
+        >
+        <a
+          href="/products/cuidado-personal"
+          class="text-gray-700 hover:text-green-600 font-medium text-sm transition-colors"
+          >Cuidado Personal</a
+        >
+
+        <a
+          href="/products/ofertas"
+          class="flex items-center space-x-1 text-gray-700 hover:text-green-600 font-medium text-sm transition-colors"
+        >
+          <span>Ofertas</span>
+          <span
+            class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold"
+            >HOT</span
+          >
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
