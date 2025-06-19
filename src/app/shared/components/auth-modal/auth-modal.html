@@ -1,0 +1,91 @@
+<!-- Modal Overlay -->
+<div
+  class="fixed inset-0 bg-transparent bg-opacity-75 z-50 flex items-center justify-center p-4 transition-all duration-300"
+  [class.opacity-100]="!isClosing()"
+  [class.opacity-0]="isClosing()"
+  (click)="closeModal()"
+>
+  <!-- Modal Content -->
+  <div
+    class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-out"
+    [class.scale-100]="!isClosing()"
+    [class.opacity-100]="!isClosing()"
+    [class.scale-75]="isClosing()"
+    [class.opacity-0]="isClosing()"
+    (click)="stopPropagation($event)"
+  >
+    <!-- Header con tabs y botón cerrar -->
+    <div class="relative p-6 pb-0">
+      <!-- Botón cerrar -->
+      <button
+        (click)="closeModal()"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+
+      <!-- Logo y título -->
+      <div class="text-center mb-6">
+        <div
+          class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900">FarmaSalud</h2>
+        <p class="text-gray-600 text-sm">Accede a tu cuenta o regístrate</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex bg-gray-100 rounded-lg p-1 mb-6">
+        <button
+          (click)="setActiveTab('login')"
+          class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+          [class.bg-white]="activeTab() === 'login'"
+          [class.text-green-600]="activeTab() === 'login'"
+          [class.shadow-sm]="activeTab() === 'login'"
+          [class.text-gray-600]="activeTab() !== 'login'"
+        >
+          Iniciar Sesión
+        </button>
+        <button
+          (click)="setActiveTab('register')"
+          class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+          [class.bg-white]="activeTab() === 'register'"
+          [class.text-green-600]="activeTab() === 'register'"
+          [class.shadow-sm]="activeTab() === 'register'"
+          [class.text-gray-600]="activeTab() !== 'register'"
+        >
+          Registrarse
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido dinámico según el tab activo -->
+    <div class="px-6 pb-6">
+      @if (activeTab() === 'login') {
+      <app-login-form
+        (loginSuccess)="onLoginSuccess()"
+        [prefilledEmail]="registeredEmail()"
+      />
+      } @else {
+      <app-register-form (registerSuccess)="onRegisterSuccess($event)" />
+      }
+    </div>
+  </div>
+</div>
