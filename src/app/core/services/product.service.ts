@@ -147,7 +147,7 @@ export class ProductService {
 
   // API Configuration
   private readonly API_URL =
-    'https://zar0bg9c3l.execute-api.us-east-1.amazonaws.com/dev';
+    'https://xkn2tlyttg.execute-api.us-east-1.amazonaws.com/prod';
 
   // Signals para estado
   private readonly _isLoading = signal<boolean>(false);

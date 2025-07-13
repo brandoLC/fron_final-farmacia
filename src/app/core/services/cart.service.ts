@@ -63,7 +63,7 @@ export class CartService {
 
   // API Configuration
   private readonly API_URL =
-    'https://2vb4fkgnri.execute-api.us-east-1.amazonaws.com/dev';
+    'https://9aofvvsdxb.execute-api.us-east-1.amazonaws.com/prod';
 
   // Signals para estado del carrito
   private readonly _items = signal<CartItem[]>([]);

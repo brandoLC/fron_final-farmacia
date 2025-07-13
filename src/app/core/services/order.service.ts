@@ -49,7 +49,7 @@ export class OrderService {
 
   // API Configuration
   private readonly API_URL =
-    'https://2vb4fkgnri.execute-api.us-east-1.amazonaws.com/dev';
+    'https://9aofvvsdxb.execute-api.us-east-1.amazonaws.com/prod';
 
   // Signals para estado
   private readonly _isLoading = signal<boolean>(false);
