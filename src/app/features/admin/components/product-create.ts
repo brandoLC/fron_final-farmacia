@@ -100,7 +100,7 @@ interface ImageUploadResponse {
                   <div class="text-center">
                     <img
                       [src]="previewImageUrl()"
-                      class="w-32 h-32 object-cover rounded-lg mx-auto mb-4"
+                      class="w-24 h-32 object-cover rounded-lg mx-auto mb-4 shadow-sm border"
                       alt="Preview"
                     />
                     <p class="text-green-600 font-medium">
@@ -457,16 +457,16 @@ interface ImageUploadResponse {
             <div class="bg-gray-50 rounded-lg p-4">
               <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <!-- Imagen del producto -->
-                <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                <div class="bg-gray-200 flex items-center justify-center">
                   @if (previewData().imagen_url) {
                   <img
                     [src]="previewData().imagen_url"
                     [alt]="previewData().nombre"
-                    class="w-full h-48 object-cover"
+                    class="w-full h-64 object-contain bg-white"
                   />
                   } @else {
                   <div
-                    class="flex items-center justify-center h-48 bg-gray-100"
+                    class="flex items-center justify-center h-64 bg-gray-100"
                   >
                     <svg
                       class="w-12 h-12 text-gray-400"
@@ -625,7 +625,7 @@ export class ProductCreateComponent implements OnInit {
 
   // API URLs
   private readonly IMAGE_API_URL =
-    'https://7948u54u3h.execute-api.us-east-1.amazonaws.com/dev';
+    'https://widxi4kx6i.execute-api.us-east-1.amazonaws.com/dev';
 
   // Signals para el estado del componente
   isSubmitting = signal<boolean>(false);

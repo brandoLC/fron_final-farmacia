@@ -103,7 +103,11 @@ export class LoginForm implements OnDestroy {
               4000
             );
 
+            // Emitir evento de login exitoso
             this.loginSuccess.emit();
+
+            // Redirección automática basada en el rol del usuario
+            this.authService.redirectAfterLogin(user);
           },
           error: (errorMessage: string) => {
             console.error('Login failed:', errorMessage);

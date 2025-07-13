@@ -27,7 +27,7 @@ import { AuthService } from '../../../core/services/auth.service';
                 <div
                   class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-semibold"
                 >
-                  👑 Admin: {{ userName() }}
+                  👑 Admin: {{ userName()?.nombres }}
                 </div>
               </div>
             </div>

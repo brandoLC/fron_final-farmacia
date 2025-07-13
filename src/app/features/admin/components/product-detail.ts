@@ -108,12 +108,12 @@ import {
             <!-- Card de Imagen Principal -->
             <div class="bg-white rounded-lg shadow-sm border p-6">
               <div
-                class="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden"
+                class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center"
               >
                 <img
                   [src]="currentProduct()!.imagen_url"
                   [alt]="currentProduct()!.nombre"
-                  class="w-full h-64 object-cover"
+                  class="w-full h-80 object-contain bg-white"
                   (error)="onImageError($event)"
                 />
               </div>
@@ -396,11 +396,11 @@ import {
               <!-- Simulación de como ve el cliente -->
               <div class="bg-gray-50 rounded-lg p-4">
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                  <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                  <div class="bg-gray-200 flex items-center justify-center">
                     <img
                       [src]="currentProduct()!.imagen_url"
                       [alt]="currentProduct()!.nombre"
-                      class="w-full h-32 object-cover"
+                      class="w-full h-40 object-contain bg-white"
                     />
                   </div>
 

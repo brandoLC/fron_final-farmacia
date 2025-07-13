@@ -97,6 +97,47 @@ export interface FilterProductsParams {
   lastKey?: string;
 }
 
+export interface CategorySearchResponse {
+  productos: Product[];
+  count: number;
+  categoria_buscada: string;
+  paginacion: {
+    pagina_actual: number;
+    limite: number;
+    hay_mas: boolean;
+    nextKey: string | null;
+  };
+}
+
+export interface SubcategorySearchResponse {
+  productos: Product[];
+  count: number;
+  subcategoria_buscada: string;
+  paginacion: {
+    pagina_actual: number;
+    limite: number;
+    hay_mas: boolean;
+    nextKey: string | null;
+  };
+  debug?: {
+    subcategoria_extraida: string;
+    filtro_aplicado: string;
+    dynamodb_count: number;
+    dynamodb_scanned: number;
+  };
+}
+
+export interface SearchResponse {
+  productos: Product[];
+  count: number;
+  searchTerm: string;
+  pagination: {
+    limit: number;
+    hasMore: boolean;
+    nextKey: string | null;
+  };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -106,7 +147,7 @@ export class ProductService {
 
   // API Configuration
   private readonly API_URL =
-    'https://6b7ua2wowe.execute-api.us-east-1.amazonaws.com/dev';
+    'https://zar0bg9c3l.execute-api.us-east-1.amazonaws.com/dev';
 
   // Signals para estado
   private readonly _isLoading = signal<boolean>(false);
@@ -150,10 +191,24 @@ export class ProductService {
     }
 
     return this.http
-      .get<ProductListResponse>(url, {
+      .get<any>(url, {
         headers: this.getAuthHeaders(),
       })
       .pipe(
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return {
+            productos: parsedBody.productos || [],
+            count: parsedBody.count || 0,
+            nextKey: parsedBody.nextKey || null,
+            hasMore: parsedBody.hasMore || false,
+          } as ProductListResponse;
+        }),
         tap((response) => {
           // Actualizar signal con productos
           if (!lastKey) {
@@ -184,10 +239,22 @@ export class ProductService {
     this._isLoading.set(true);
 
     return this.http
-      .post<ProductResponse>(`${this.API_URL}/productos/crear`, productData, {
+      .post<any>(`${this.API_URL}/productos/crear`, productData, {
         headers: this.getAuthHeaders(),
       })
       .pipe(
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return {
+            producto: parsedBody.producto,
+            message: parsedBody.message || 'Producto creado exitosamente',
+          } as ProductResponse;
+        }),
         tap((response) => {
           // Agregar producto al signal
           this._products.update((current) => [response.producto, ...current]);
@@ -207,12 +274,19 @@ export class ProductService {
     this._isLoading.set(true);
 
     return this.http
-      .get<{ producto: Product }>(
-        `${this.API_URL}/productos/buscar/${codigo}`,
-        { headers: this.getAuthHeaders() }
-      )
+      .get<any>(`${this.API_URL}/productos/buscar/${codigo}`, {
+        headers: this.getAuthHeaders(),
+      })
       .pipe(
-        map((response) => response.producto),
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return parsedBody.producto;
+        }),
         tap(() => this._isLoading.set(false)),
         catchError((error) => {
           this._isLoading.set(false);
@@ -231,12 +305,22 @@ export class ProductService {
     this._isLoading.set(true);
 
     return this.http
-      .put<ProductResponse>(
-        `${this.API_URL}/productos/modificar/${codigo}`,
-        productData,
-        { headers: this.getAuthHeaders() }
-      )
+      .put<any>(`${this.API_URL}/productos/modificar/${codigo}`, productData, {
+        headers: this.getAuthHeaders(),
+      })
       .pipe(
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return {
+            producto: parsedBody.producto,
+            message: parsedBody.message || 'Producto modificado exitosamente',
+          } as ProductResponse;
+        }),
         tap((response) => {
           // Actualizar producto en el signal
           this._products.update((current) =>
@@ -511,5 +595,185 @@ export class ProductService {
     }
 
     return error.message || 'Error inesperado al procesar la solicitud.';
+  }
+
+  /**
+   * Busca productos por término de búsqueda
+   */
+  buscarProductos(
+    searchTerm: string,
+    limit: number = 10,
+    nextKey?: string
+  ): Observable<SearchResponse> {
+    this._isLoading.set(true);
+
+    // Construir query string
+    const queryParams = new URLSearchParams();
+    queryParams.append('q', searchTerm);
+    queryParams.append('limit', limit.toString());
+
+    if (nextKey) {
+      queryParams.append('nextKey', nextKey);
+    }
+
+    const url = `${this.API_URL}/productos/search?${queryParams.toString()}`;
+
+    return this.http
+      .get<SearchResponse>(url, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap((response) => {
+          // Si no hay nextKey, es una nueva búsqueda
+          if (!nextKey) {
+            this._products.set(response.productos);
+          } else {
+            // Agregar más resultados
+            this._products.update((current) => [
+              ...current,
+              ...response.productos,
+            ]);
+          }
+          this._isLoading.set(false);
+        }),
+        catchError((error) => {
+          this._isLoading.set(false);
+          return throwError(() => this.handleError(error));
+        })
+      );
+  }
+
+  /**
+   * Busca productos por categoría
+   */
+  buscarProductosPorCategoria(
+    categoria: string,
+    limit: number = 20,
+    nextKey?: string
+  ): Observable<CategorySearchResponse> {
+    this._isLoading.set(true);
+
+    // Construir query string
+    const queryParams = new URLSearchParams();
+    queryParams.append('limit', limit.toString());
+
+    if (nextKey) {
+      queryParams.append('nextKey', nextKey);
+    }
+
+    const url = `${this.API_URL}/productos/categoria/${encodeURIComponent(
+      categoria
+    )}?${queryParams.toString()}`;
+
+    return this.http
+      .get<any>(url, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return {
+            productos: parsedBody.productos || [],
+            count: parsedBody.count || 0,
+            categoria_buscada: parsedBody.categoria_buscada || categoria,
+            paginacion: parsedBody.paginacion || {
+              pagina_actual: 1,
+              limite: limit,
+              hay_mas: false,
+              nextKey: null,
+            },
+          } as CategorySearchResponse;
+        }),
+        tap((response) => {
+          // Si no hay nextKey, es una nueva búsqueda
+          if (!nextKey) {
+            this._products.set(response.productos);
+          } else {
+            // Agregar más resultados
+            this._products.update((current) => [
+              ...current,
+              ...response.productos,
+            ]);
+          }
+          this._isLoading.set(false);
+        }),
+        catchError((error) => {
+          this._isLoading.set(false);
+          return throwError(() => this.handleError(error));
+        })
+      );
+  }
+
+  /**
+   * Busca productos por subcategoría
+   */
+  buscarProductosPorSubcategoria(
+    subcategoria: string,
+    limit: number = 20,
+    nextKey?: string
+  ): Observable<SubcategorySearchResponse> {
+    this._isLoading.set(true);
+
+    // Construir query string
+    const queryParams = new URLSearchParams();
+    queryParams.append('limit', limit.toString());
+
+    if (nextKey) {
+      queryParams.append('nextKey', nextKey);
+    }
+
+    const url = `${this.API_URL}/productos/subcategoria/${encodeURIComponent(
+      subcategoria
+    )}?${queryParams.toString()}`;
+
+    return this.http
+      .get<any>(url, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        map((response) => {
+          // Parsear el body si es un string JSON
+          const parsedBody =
+            typeof response.body === 'string'
+              ? JSON.parse(response.body)
+              : response.body || response;
+
+          return {
+            productos: parsedBody.productos || [],
+            count: parsedBody.count || 0,
+            subcategoria_buscada:
+              parsedBody.subcategoria_buscada || subcategoria,
+            paginacion: parsedBody.paginacion || {
+              pagina_actual: 1,
+              limite: limit,
+              hay_mas: false,
+              nextKey: null,
+            },
+            debug: parsedBody.debug,
+          } as SubcategorySearchResponse;
+        }),
+        tap((response) => {
+          // Si no hay nextKey, es una nueva búsqueda
+          if (!nextKey) {
+            this._products.set(response.productos);
+          } else {
+            // Agregar más resultados
+            this._products.update((current) => [
+              ...current,
+              ...response.productos,
+            ]);
+          }
+          this._isLoading.set(false);
+        }),
+        catchError((error) => {
+          this._isLoading.set(false);
+          return throwError(() => this.handleError(error));
+        })
+      );
   }
 }

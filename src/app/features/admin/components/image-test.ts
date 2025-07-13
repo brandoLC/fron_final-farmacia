@@ -118,7 +118,7 @@ export class ImageTestComponent {
 
   // API Configuration
   private readonly API_URL =
-    'https://7948u54u3h.execute-api.us-east-1.amazonaws.com/dev';
+    'https://widxi4kx6i.execute-api.us-east-1.amazonaws.com/dev';
 
   // Signals
   selectedFile = signal<File | null>(null);

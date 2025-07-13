@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, catchError, throwError, map, tap } from 'rxjs';
 import {
   User,
@@ -15,6 +16,7 @@ import {
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   // API Base URL - URL real de tu API Gateway
   private readonly API_BASE_URL =
@@ -49,20 +51,28 @@ export class AuthService {
    */
   private validateTokenOnInit(): void {
     const token = this.getStoredToken();
+    console.log('AuthService - validateTokenOnInit:', {
+      token: token ? 'exists' : 'not found',
+    });
+
     if (token) {
       this._isLoading.set(true);
       this.validateToken().subscribe({
         next: (user) => {
+          console.log('AuthService - Token válido, usuario:', user);
           this._currentUser.set(user);
           this._isAuthenticated.set(true);
           this._isLoading.set(false);
         },
-        error: () => {
+        error: (error) => {
+          console.log('AuthService - Token inválido, error:', error);
           // Token inválido, limpiar localStorage
           this.clearAuthData();
           this._isLoading.set(false);
         },
       });
+    } else {
+      console.log('AuthService - No token found in localStorage');
     }
   }
 
@@ -262,6 +272,19 @@ export class AuthService {
    */
   logout(): void {
     this.clearAuthData();
+    // Redirigir al inicio después del logout
+    this.router.navigate(['/']);
+  }
+
+  /**
+   * Redirige al usuario según su rol después del login
+   */
+  redirectAfterLogin(user: User): void {
+    if (user.rol === 'admin') {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   /**

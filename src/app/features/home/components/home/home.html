@@ -1,1 +1,293 @@
-<p>home works!</p>
+<!-- Hero Carousel Section - Full Width -->
+<div class="w-full mb-8">
+  <div
+    class="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden bg-gray-100"
+    (mouseenter)="pauseCarousel()"
+    (mouseleave)="resumeCarousel()"
+  >
+    <!-- Slides Container -->
+    <div class="relative w-full h-full">
+      @for (slide of slides; track slide.id; let i = $index) {
+      <div
+        class="absolute inset-0 w-full h-full transition-all duration-700 ease-out transform"
+        [class.opacity-100]="currentSlide() === i"
+        [class.opacity-0]="currentSlide() !== i"
+        [class.scale-105]="currentSlide() !== i"
+        [class.translate-x-8]="currentSlide() !== i"
+        [class.scale-100]="currentSlide() === i"
+        [class.translate-x-0]="currentSlide() === i"
+      >
+        @if (slide.type === 'single') {
+        <!-- Single Banner - Full Width -->
+        <img
+          [src]="slide.images[0]"
+          [alt]="'Banner ' + (i + 1)"
+          class="w-full h-full object-cover object-center"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+        } @else {
+        <!-- Double Banner - Side by Side -->
+        <div class="flex w-full h-full">
+          @for (image of slide.images; track image; let j = $index) {
+          <img
+            [src]="image"
+            [alt]="'Banner ' + (i + 1) + '-' + (j + 1)"
+            class="flex-1 w-1/2 h-full object-cover object-center"
+            (error)="onImageError($event)"
+            loading="lazy"
+          />
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button
+      class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-10"
+      (click)="prevSlide()"
+      [disabled]="isAnimating()"
+      aria-label="Imagen anterior"
+    >
+      <svg
+        class="w-5 h-5 text-gray-700 hover:text-green-600 transition-colors"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </button>
+
+    <button
+      class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-10"
+      (click)="nextSlide()"
+      [disabled]="isAnimating()"
+      aria-label="Siguiente imagen"
+    >
+      <svg
+        class="w-5 h-5 text-gray-700 hover:text-green-600 transition-colors"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+      </svg>
+    </button>
+
+    <!-- Indicators -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+      @for (slide of slides; track slide.id; let i = $index) {
+      <div
+        class="w-3 h-3 rounded-full backdrop-blur-sm transition-all duration-300 cursor-pointer"
+        [ngClass]="{
+            'bg-green-600 shadow-lg scale-125': currentSlide() === i,
+            'bg-white/60 hover:bg-white/80 hover:scale-110': currentSlide() !== i
+          }"
+        (click)="goToSlide(i)"
+        [attr.aria-label]="'Ir a imagen ' + (i + 1)"
+      ></div>
+      }
+    </div>
+
+    <!-- Loading overlay (opcional) -->
+    @if (isAnimating()) {
+    <div class="absolute inset-0 bg-black/10 z-20 pointer-events-none"></div>
+    }
+  </div>
+</div>
+
+<!-- Mensaje Informativo -->
+<div class="w-full bg-gray-50 py-6">
+  <div class="container mx-auto px-4 text-center">
+    <p class="text-gray-600 text-sm md:text-base max-w-4xl mx-auto">
+      Todos los productos farmacéuticos y dispositivos médicos son distribuidos
+      por
+      <span class="font-semibold text-gray-800">FarmaciaApp S.A.</span>
+      (Ley 32033). Productos originales con garantía de calidad. Consulta con
+      nuestros farmacéuticos especializados para mayor información.
+    </p>
+  </div>
+</div>
+
+<!-- Banner Promocional -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div
+      class="relative w-full h-32 md:h-40 lg:h-48 overflow-hidden rounded-lg shadow-lg"
+    >
+      <img
+        src="assets/home/banners/banner1.avif"
+        alt="Promociones especiales de farmacia"
+        class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+        (error)="onImageError($event)"
+        loading="lazy"
+      />
+      <!-- Overlay sutil para mejor legibilidad si el banner tiene texto -->
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent pointer-events-none"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<!-- Segunda Fila - Escudos Rectangulares -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/segunda-fila/escudorectanglo1.avif"
+          alt="Escudo rectangular 1"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/segunda-fila/escudorectangulo2.avif"
+          alt="Escudo rectangular 2"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/segunda-fila/escudorecatangulo3.avif"
+          alt="Escudo rectangular 3"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Banner 2 -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div class="relative w-full overflow-hidden rounded-lg shadow-lg bg-white">
+      <img
+        src="assets/home/banners/baner2.avif"
+        alt="Banner promocional 2"
+        class="w-full h-auto object-contain object-center hover:scale-105 transition-transform duration-500"
+        (error)="onImageError($event)"
+        loading="lazy"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent pointer-events-none"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<!-- Tercera Fila - Escudos Cuadrados -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/tercera-fila/escudo1.avif"
+          alt="Escudo 1"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/tercera-fila/escudo2.avif"
+          alt="Escudo 2"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/tercera-fila/escudo3.avif"
+          alt="Escudo 3"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/tercera-fila/escudo4.avif"
+          alt="Escudo 4"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Banner 3 -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div
+      class="relative w-full h-32 md:h-40 lg:h-48 overflow-hidden rounded-lg shadow-lg"
+    >
+      <img
+        src="assets/home/banners/banner3.avif"
+        alt="Banner promocional 3"
+        class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+        (error)="onImageError($event)"
+        loading="lazy"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent pointer-events-none"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<!-- Cuarta Fila - Sub-banners -->
+<div class="w-full mb-8">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/cuarta-fila/subbaner1.avif"
+          alt="Sub-banner 1"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/cuarta-fila/subbaner2.avif"
+          alt="Sub-banner 2"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/cuarta-fila/subbaner3.avif"
+          alt="Sub-banner 3"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+      <div class="relative overflow-hidden rounded-lg shadow-md bg-white">
+        <img
+          src="assets/home/cuarta-fila/subbaner4.avif"
+          alt="Sub-banner 4"
+          class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+          (error)="onImageError($event)"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</div>

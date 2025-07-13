@@ -191,120 +191,192 @@ import {
             </button>
           </div>
           } @else {
-          <!-- Grid de productos -->
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6"
-          >
+          <!-- Lista de productos -->
+          <div class="space-y-4 p-6">
             @for (product of products(); track product.codigo) {
             <div
-              class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+              class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-green-300 transition-all duration-300 group"
             >
-              <!-- Imagen del producto -->
-              <div class="aspect-w-1 aspect-h-1 bg-gray-200">
-                @if (product.imagen_url) {
-                <img
-                  [src]="product.imagen_url"
-                  [alt]="product.nombre"
-                  class="w-full h-48 object-cover"
-                />
-                } @else {
+              <div class="flex h-32 md:h-40">
+                <!-- Imagen del producto -->
                 <div
-                  class="w-full h-48 bg-gray-100 flex items-center justify-center"
+                  class="w-32 md:w-40 h-32 md:h-40 bg-gray-200 flex-shrink-0"
                 >
-                  <svg
-                    class="w-12 h-12 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                  @if (product.imagen_url) {
+                  <img
+                    [src]="product.imagen_url"
+                    [alt]="product.nombre"
+                    class="w-full h-full object-contain bg-white group-hover:scale-105 transition-transform duration-300"
+                  />
+                  } @else {
+                  <div
+                    class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                    <svg
+                      class="w-8 h-8 md:w-12 md:h-12 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  }
                 </div>
-                }
+
+                <!-- Información del producto -->
+                <div
+                  class="flex-1 p-3 md:p-4 flex flex-col justify-between min-w-0"
+                >
+                  <div class="flex-1">
+                    <div class="flex items-start justify-between mb-2">
+                      <h3
+                        class="text-sm md:text-base font-bold text-gray-900 line-clamp-2 group-hover:text-green-700 transition-colors pr-2"
+                      >
+                        {{ product.nombre }}
+                      </h3>
+                      @if (product.requiere_receta) {
+                      <span
+                        class="ml-2 px-2 py-1 text-xs font-bold bg-red-100 text-red-800 rounded-full flex-shrink-0"
+                      >
+                        Rx
+                      </span>
+                      }
+                    </div>
+
+                    <p
+                      class="text-xs text-gray-500 mb-2 font-mono bg-gray-50 px-2 py-1 rounded inline-block"
+                    >
+                      {{ product.codigo }}
+                    </p>
+
+                    <div class="text-xs text-gray-600 space-y-1 mb-3">
+                      <div class="flex items-center">
+                        <span
+                          class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"
+                        ></span>
+                        <span class="font-medium truncate">{{
+                          product.categoria
+                        }}</span>
+                      </div>
+                      @if (product.subcategoria) {
+                      <div class="flex items-center">
+                        <span
+                          class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"
+                        ></span>
+                        <span class="truncate">{{ product.subcategoria }}</span>
+                      </div>
+                      }
+                      <div class="flex items-center">
+                        <span
+                          class="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2 flex-shrink-0"
+                        ></span>
+                        <span class="truncate">{{ product.laboratorio }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <span class="text-lg md:text-xl font-bold text-green-600">
+                      S/. {{ product.precio | number : '1.2-2' }}
+                    </span>
+                    <span [class]="getStockClass(product.stock_disponible)">
+                      Stock: {{ product.stock_disponible }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <!-- Información del producto -->
-              <div class="p-4">
-                <div class="flex items-start justify-between mb-2">
-                  <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
-                    {{ product.nombre }}
-                  </h3>
-                  @if (product.requiere_receta) {
-                  <span
-                    class="ml-2 px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full"
-                  >
-                    Rx
-                  </span>
-                  }
+              <!-- Acciones -->
+              <div
+                class="px-3 md:px-4 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between"
+              >
+                <div class="flex items-center space-x-2 text-xs text-gray-500">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span class="hidden sm:inline">{{
+                    product.fecha_creacion | date : 'dd/MM/yy'
+                  }}</span>
                 </div>
 
-                <p class="text-sm text-gray-600 mb-2">{{ product.codigo }}</p>
-
-                <div class="flex items-center justify-between mb-3">
-                  <span class="text-xl font-bold text-green-600">
-                    S/. {{ product.precio | number : '1.2-2' }}
-                  </span>
-                  <span [class]="getStockClass(product.stock_disponible)">
-                    Stock: {{ product.stock_disponible }}
-                  </span>
-                </div>
-
-                <div class="mb-3">
-                  <span
-                    class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
-                  >
-                    {{ product.categoria }}
-                  </span>
-                  @if (product.subcategoria) {
-                  <span
-                    class="ml-1 px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full"
-                  >
-                    {{ product.subcategoria }}
-                  </span>
-                  }
-                </div>
-
-                <!-- Acciones -->
-                <div class="flex space-x-2">
+                <div class="flex items-center space-x-1 md:space-x-2">
                   <button
                     (click)="navigateTo('/admin/products/' + product.codigo)"
-                    class="flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    class="px-2 md:px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Ver detalles"
                   >
-                    Ver
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                    <span class="hidden sm:inline ml-1">Ver</span>
                   </button>
                   <button
                     (click)="
                       navigateTo('/admin/products/edit/' + product.codigo)
                     "
-                    class="flex-1 px-3 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    (click)="confirmDelete(product)"
-                    class="px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    class="px-2 md:px-3 py-1.5 text-xs font-medium text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-colors"
+                    title="Editar producto"
                   >
                     <svg
                       class="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
-                        fill-rule="evenodd"
-                        d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"
-                        clip-rule="evenodd"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 012 0v4a1 1 0 11-2 0V7zM12 7a1 1 0 10-2 0v4a1 1 0 102 0V7z"
-                        clip-rule="evenodd"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
                     </svg>
+                    <span class="hidden sm:inline ml-1">Editar</span>
+                  </button>
+                  <button
+                    (click)="confirmDelete(product)"
+                    class="px-2 md:px-3 py-1.5 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Eliminar producto"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    <span class="hidden sm:inline ml-1">Eliminar</span>
                   </button>
                 </div>
               </div>
@@ -512,9 +584,11 @@ export class ProductListComponent implements OnInit {
   }
 
   getStockClass(stock: number): string {
-    if (stock === 0) return 'text-xs font-medium text-red-600';
-    if (stock < 10) return 'text-xs font-medium text-yellow-600';
-    return 'text-xs font-medium text-green-600';
+    if (stock === 0)
+      return 'text-xs px-2 py-1 rounded-full font-bold bg-red-100 text-red-800';
+    if (stock < 10)
+      return 'text-xs px-2 py-1 rounded-full font-bold bg-yellow-100 text-yellow-800';
+    return 'text-xs px-2 py-1 rounded-full font-bold bg-green-100 text-green-800';
   }
 
   confirmDelete(product: Product) {

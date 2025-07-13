@@ -1,12 +1,12 @@
 <nav class="border-t border-gray-100 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-center h-12">
-      <!-- Navegación pública -->
-      <app-public-navigation></app-public-navigation>
-
       <!-- Navegación de administración - Solo visible para admin -->
       @if (isAdmin()) {
       <app-admin-navigation></app-admin-navigation>
+      } @else {
+      <!-- Navegación pública - Para usuarios normales -->
+      <app-public-navigation></app-public-navigation>
       }
     </div>
   </div>

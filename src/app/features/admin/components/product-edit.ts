@@ -517,9 +517,7 @@ interface ImageUploadResponse {
                     [class.text-red-600]="currentProduct()?.activo"
                     [class.text-green-600]="!currentProduct()?.activo"
                   >
-                    {{
-                      currentProduct()?.activo ? 'Desactivar' : 'Activar'
-                    }}
+                    {{ currentProduct()?.activo ? 'Desactivar' : 'Activar' }}
                     Producto
                   </button>
                 </div>
@@ -723,7 +721,7 @@ export class ProductEditComponent implements OnInit {
 
   // API URLs
   private readonly IMAGE_API_URL =
-    'https://7948u54u3h.execute-api.us-east-1.amazonaws.com/dev';
+    'https://widxi4kx6i.execute-api.us-east-1.amazonaws.com/dev';
 
   // Signals para el estado del componente
   isLoading = signal<boolean>(true);

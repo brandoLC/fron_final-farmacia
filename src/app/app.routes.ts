@@ -71,6 +71,54 @@ export const routes: Routes = [
           },
         ],
       },
+      // Rutas públicas de productos
+      {
+        path: 'search',
+        loadComponent: () =>
+          import('./features/search/search-results').then((m) => m.default),
+      },
+      {
+        path: 'product/:codigo',
+        loadComponent: () =>
+          import('./features/product/product-detail').then((m) => m.default),
+      },
+      {
+        path: 'products/category/:category',
+        loadComponent: () =>
+          import('./features/product/category-products').then(
+            (m) => m.CategoryProductsComponent
+          ),
+      },
+      {
+        path: 'products/subcategory/:subcategory',
+        loadComponent: () =>
+          import('./features/product/subcategory-products').then(
+            (m) => m.SubcategoryProductsComponent
+          ),
+      },
+      // Rutas de checkout
+      {
+        path: 'checkout',
+        loadComponent: () =>
+          import('./features/checkout/checkout').then(
+            (m) => m.CheckoutComponent
+          ),
+      },
+      {
+        path: 'checkout/success',
+        loadComponent: () =>
+          import('./features/checkout/checkout-success').then(
+            (m) => m.CheckoutSuccessComponent
+          ),
+      },
+      // Rutas de pedidos
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/orders/order-history').then(
+            (m) => m.OrderHistoryComponent
+          ),
+      },
       {
         path: '**',
         redirectTo: '',

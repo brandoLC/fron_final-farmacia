@@ -607,7 +607,7 @@ export class ImageManagerComponent implements OnInit {
 
   // API URLs
   private readonly IMAGE_API_URL =
-    'https://7948u54u3h.execute-api.us-east-1.amazonaws.com/dev';
+    'https://widxi4kx6i.execute-api.us-east-1.amazonaws.com/dev';
 
   // Signals para el estado del componente
   isUploading = signal<boolean>(false);

@@ -1,0 +1,252 @@
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px; /* Aumentado el ancho máximo */
+  height: 500px; /* Aumentada la altura */
+  overflow: hidden;
+  border-radius: 16px; /* Bordes más grandes */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  margin: 0 auto 2rem auto; /* Centrado */
+}
+
+/* Slides Container */
+.slides-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Individual Slide */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(1.05) translateX(30px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
+}
+
+/* Active Slide */
+.slide.active {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+  z-index: 2;
+}
+
+/* Single Banner */
+.single-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+}
+
+/* Double Banner Container */
+.double-banner {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 4px; /* Aumentado el gap */
+}
+
+.double-banner img {
+  flex: 1;
+  width: 50%; /* Asegurar que cada imagen ocupe exactamente el 50% */
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.double-banner img:first-child {
+  border-radius: 16px 0 0 16px;
+}
+
+.double-banner img:last-child {
+  border-radius: 0 16px 16px 0;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.nav-arrow.prev {
+  left: 20px;
+}
+
+.nav-arrow.next {
+  right: 20px;
+}
+
+.nav-arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: #374151;
+  transition: fill 0.3s ease;
+}
+
+.nav-arrow:hover svg {
+  fill: #059669;
+}
+
+/* Indicators */
+.indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.indicator.active {
+  background: #059669;
+  transform: scale(1.2);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+/* Loading Animation */
+.carousel-container.loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  z-index: 5;
+  border-radius: 12px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .carousel-container {
+    height: 300px; /* Aumentada la altura en tablet */
+    border-radius: 12px;
+  }
+
+  .nav-arrow {
+    width: 45px;
+    height: 45px;
+  }
+
+  .nav-arrow.prev {
+    left: 12px;
+  }
+
+  .nav-arrow.next {
+    right: 12px;
+  }
+
+  .nav-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .indicators {
+    bottom: 18px;
+    gap: 10px;
+  }
+
+  .indicator {
+    width: 11px;
+    height: 11px;
+  }
+
+  .double-banner {
+    gap: 3px;
+  }
+
+  .single-banner,
+  .double-banner img:first-child,
+  .double-banner img:last-child {
+    border-radius: 12px;
+  }
+
+  .double-banner img:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .double-banner img:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-container {
+    height: 220px; /* Aumentada la altura en móvil */
+  }
+
+  .nav-arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nav-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .double-banner {
+    gap: 2px;
+  }
+}
+
+/* Smooth transitions for all elements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
